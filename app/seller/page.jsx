@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import { useAppContext } from '@/context/AppContext';
 
 const AddProduct = () => {
 
@@ -11,10 +12,45 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Earphone');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
+  const { userData, addProduct } = useAppContext();
+
+  // Helper to convert file to base64
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    // Convert all files to base64
+    const imageBase64s = await Promise.all(
+      files.map(f => f ? fileToBase64(f) : '')
+    );
+    // Prepare product object
+    const newProduct = {
+      _id: `prod_${Date.now()}`,
+      userId: userData?._id,
+      name,
+      description,
+      category,
+      price: parseFloat(price),
+      offerPrice: parseFloat(offerPrice),
+      image: imageBase64s,
+      date: Date.now(),
+    };
+    addProduct(newProduct);
+    // Reset form
+    setFiles([]);
+    setName('');
+    setDescription('');
+    setCategory('Earphone');
+    setPrice('');
+    setOfferPrice('');
+    alert('Product added successfully!');
   };
 
   return (

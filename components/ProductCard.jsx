@@ -1,30 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { assets } from '@/assets/assets'
 import Image from 'next/image';
 import { useAppContext } from '@/context/AppContext';
 
 const ProductCard = ({ product }) => {
-
     const { currency, router } = useAppContext()
+    const [imageLoading, setImageLoading] = useState(true)
+
+    // Handle navigation without local loading overlay
+    const handleProductClick = () => {
+        router.push('/product/' + product._id);
+    }
+
+    const handleBuyNowClick = (e) => {
+        e.stopPropagation();
+        router.push('/product/' + product._id);
+    }
 
     return (
         <div
-            onClick={() => { router.push('/product/' + product._id); scrollTo(0, 0) }}
-            className="flex flex-col items-start gap-0.5 max-w-[200px] w-full cursor-pointer"
+            onClick={handleProductClick}
+            className={"flex flex-col items-start gap-0.5 max-w-[200px] w-full cursor-pointer group relative"}
         >
-            <div className="cursor-pointer group relative bg-gray-500/10 rounded-lg w-full h-52 flex items-center justify-center">
+            <div className="cursor-pointer group relative bg-gray-500/10 rounded-lg w-full h-52 flex items-center justify-center overflow-hidden">
+                {imageLoading && (
+                    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg"></div>
+                )}
                 <Image
                     src={product.image[0]}
                     alt={product.name}
-                    className="group-hover:scale-105 transition object-cover w-4/5 h-4/5 md:w-full md:h-full"
-                    width={800}
-                    height={800}
+                    className={`group-hover:scale-105 transition object-cover w-4/5 h-4/5 md:w-full md:h-full ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                    width={400}
+                    height={400}
+                    priority={false}
+                    loading="lazy"
+                    onLoad={() => setImageLoading(false)}
+                    onError={() => setImageLoading(false)}
                 />
-                <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
+                <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-gray-50 transition">
                     <Image
                         className="h-3 w-3"
                         src={assets.heart_icon}
                         alt="heart_icon"
+                        width={12}
+                        height={12}
                     />
                 </button>
             </div>
@@ -51,7 +70,10 @@ const ProductCard = ({ product }) => {
 
             <div className="flex items-end justify-between w-full mt-1">
                 <p className="text-base font-medium">{currency}{product.offerPrice}</p>
-                <button className=" max-sm:hidden px-4 py-1.5 text-gray-500 border border-gray-500/20 rounded-full text-xs hover:bg-slate-50 transition">
+                <button
+                    className="max-sm:hidden px-4 py-1.5 text-gray-500 border border-gray-500/20 rounded-full text-xs hover:bg-slate-50 transition"
+                    onClick={handleBuyNowClick}
+                >
                     Buy now
                 </button>
             </div>
