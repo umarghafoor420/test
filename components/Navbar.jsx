@@ -4,12 +4,14 @@ import { assets} from "@/assets/assets";
 import Link from "next/link"
 import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
-import { useClerk, useUser, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+// import { useClerk, useUser, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
 
   const { isSeller, router, unreadCount } = useAppContext();
-  const { isSignedIn, user } = useUser();
+  // const { isSignedIn, user } = useUser();
+  const isSignedIn = false; // Temporarily disabled
+  const user = null;
   const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -75,67 +77,15 @@ const Navbar = () => {
         {/* Desktop Auth Section */}
         <div className="hidden lg:flex items-center gap-4 xl:gap-6">
           <Image className="w-4 h-4 xl:w-5 xl:h-5" src={assets.search_icon} alt="search icon" />
-          {isSignedIn ? (
-            <div className="relative" ref={dropdownRef}>
-              <button 
-                onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
-                className="flex items-center gap-2 hover:text-gray-900 transition px-3 py-2 rounded-lg hover:bg-gray-100"
-              >
-                <Image src={assets.user_icon} alt="user icon" className="w-5 h-5" />
-                <span className="text-sm font-medium">Account</span>
-                <svg className={`w-4 h-4 transition-transform ${isAccountDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              
-              {isAccountDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-56 xl:w-64 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50">
-                  <div className="px-4 py-3 border-b border-gray-100">
-                    <p className="text-sm font-semibold text-gray-900">{user?.firstName} {user?.lastName}</p>
-                    <p className="text-xs text-gray-500 truncate">{user?.emailAddresses[0]?.emailAddress}</p>
-                  </div>
-                  <Link 
-                    href="/my-orders" 
-                    className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
-                    onClick={() => setIsAccountDropdownOpen(false)}
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                    My Orders
-                  </Link>
-                  <Link 
-                    href="/add-address" 
-                    className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
-                    onClick={() => setIsAccountDropdownOpen(false)}
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Manage Addresses
-                  </Link>
-                  <div className="border-t border-gray-100 px-4 py-2">
-                    <UserButton afterSignOutUrl="/" />
-                  </div>
-                </div>
-              )}
-            </div>
-          ) : (
             <div className="flex items-center gap-3">
-              <SignInButton mode="modal">
                 <button className="flex items-center gap-2 hover:text-gray-900 transition px-3 py-2 rounded-lg hover:bg-gray-100">
                   <Image src={assets.user_icon} alt="user icon" className="w-5 h-5" />
-                  <span className="text-sm font-medium">Sign In</span>
+              <span className="text-sm font-medium">Sign In (Demo)</span>
                 </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
                 <button className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition font-medium text-sm">
-                  Sign Up
+              Sign Up (Demo)
                 </button>
-              </SignUpButton>
             </div>
-          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -202,55 +152,15 @@ const Navbar = () => {
 
             {/* Mobile Auth Section */}
             <div className="border-t border-gray-200 pt-4">
-              {isSignedIn ? (
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <Image src={assets.user_icon} alt="user icon" className="w-8 h-8" />
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{user?.firstName} {user?.lastName}</p>
-                      <p className="text-xs text-gray-500">{user?.emailAddresses[0]?.emailAddress}</p>
-                    </div>
-                  </div>
-                  <Link 
-                    href="/my-orders" 
-                    className="flex items-center gap-3 py-3 text-gray-700 hover:text-gray-900 transition"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
-                    My Orders
-                  </Link>
-                  <Link 
-                    href="/add-address" 
-                    className="flex items-center gap-3 py-3 text-gray-700 hover:text-gray-900 transition"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Manage Addresses
-                  </Link>
-                  <div className="pt-2">
-                    <UserButton afterSignOutUrl="/" />
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <SignInButton mode="modal">
                     <button className="w-full flex items-center justify-center gap-2 py-3 px-4 text-gray-700 hover:text-gray-900 transition border border-gray-300 rounded-lg hover:bg-gray-50">
                       <Image src={assets.user_icon} alt="user icon" className="w-5 h-5" />
-                      <span className="font-medium">Sign In</span>
+                  <span className="font-medium">Sign In (Demo)</span>
                     </button>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
                     <button className="w-full bg-orange-600 text-white py-3 px-4 rounded-lg hover:bg-orange-700 transition font-medium">
-                      Sign Up
+                  Sign Up (Demo)
                     </button>
-                  </SignUpButton>
                 </div>
-              )}
             </div>
           </div>
         </div>

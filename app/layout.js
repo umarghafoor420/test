@@ -2,7 +2,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { AppContextProvider } from "@/context/AppContext";
 import { Toaster } from "react-hot-toast";
-import { ClerkProvider } from "@clerk/nextjs";
+// import { ClerkProvider } from "@clerk/nextjs";
 import GlobalLoadingOverlay from '@/components/GlobalLoadingOverlay';
 
 const outfit = Outfit({ subsets: ['latin'], weight: ["300", "400", "500"] })
@@ -14,16 +14,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`${outfit.className} antialiased text-gray-700`} >
-          <Toaster />
-          <AppContextProvider>
-            <GlobalLoadingOverlay />
-            {children}
-          </AppContextProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={`${outfit.className} antialiased text-gray-700`} >
+        <Toaster />
+        <AppContextProvider>
+          <GlobalLoadingOverlay />
+          {children}
+        </AppContextProvider>
+      </body>
+    </html>
   );
 }

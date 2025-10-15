@@ -1,7 +1,7 @@
 import { addressDummyData } from "@/assets/assets";
 import { useAppContext } from "@/context/AppContext";
 import React, { useEffect, useState } from "react";
-import { useUser, SignInButton } from "@clerk/nextjs";
+// import { useUser, SignInButton } from "@clerk/nextjs";
 import AuthGuard from "./AuthGuard";
 import PaymentMethods from "./PaymentMethods";
 import StripePayment from "./StripePayment";
@@ -11,7 +11,8 @@ import OrangeButton from '@/components/OrangeButton';
 const OrderSummary = () => {
 
   const { currency, router, getCartCount, getCartAmount, addOrder, products, cartItems, addNotification } = useAppContext()
-  const { isSignedIn } = useUser();
+  // const { isSignedIn } = useUser();
+  const isSignedIn = true; // Temporarily set to true for demo
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);

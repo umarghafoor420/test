@@ -1,13 +1,15 @@
 "use client"
 import React from "react";
-import { useUser, SignInButton } from "@clerk/nextjs";
+// import { useUser, SignInButton } from "@clerk/nextjs";
 import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import { assets } from "@/assets/assets";
 
 const AuthGuard = ({ children, fallback = null }) => {
-  const { isSignedIn, isLoaded } = useUser();
+  // const { isSignedIn, isLoaded } = useUser();
   const { router } = useAppContext();
+  const isSignedIn = true; // Temporarily set to true for demo
+  const isLoaded = true;
 
   // Show loading state while Clerk is loading
   if (!isLoaded) {
@@ -39,11 +41,9 @@ const AuthGuard = ({ children, fallback = null }) => {
             You need to be signed in to access this feature. Please sign in to continue.
           </p>
           <div className="space-y-4">
-            <SignInButton mode="modal">
-              <button className="w-full bg-orange-600 text-white py-3 px-6 rounded-md hover:bg-orange-700 transition font-medium">
-                Sign In
-              </button>
-            </SignInButton>
+            <button className="w-full bg-orange-600 text-white py-3 px-6 rounded-md hover:bg-orange-700 transition font-medium">
+              Sign In (Demo)
+            </button>
             <button 
               onClick={() => router.push('/')}
               className="w-full text-gray-600 py-2 px-6 rounded-md hover:bg-gray-100 transition"

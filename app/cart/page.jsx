@@ -5,13 +5,14 @@ import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { useAppContext } from "@/context/AppContext";
-import { useUser, SignInButton } from "@clerk/nextjs";
+// import { useUser, SignInButton } from "@clerk/nextjs";
 import OrangeButton from '@/components/OrangeButton';
 
 const Cart = () => {
 
   const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount } = useAppContext();
-  const { isSignedIn } = useUser();
+  // const { isSignedIn } = useUser();
+  const isSignedIn = true; // Temporarily set to true for demo
 
   return (
     <>
